@@ -1,8 +1,9 @@
-# Transparency Portal · Silang, Cavite
+# BetterSilang · Budget Transparency Portal for Silang, Cavite
 
 A budget transparency portal for the **Municipality of Silang, Cavite (Region IV-A)**, built
 from BetterGov.ph's forkable [transparency-portal](https://github.com/bettergovph/transparency-portal)
-template. It shows citizens **every FY 2027 budget project** whose title names Silang: what
+template and named after the [BetterLGU Directory](https://lgu.bettergov.ph) convention
+(`better[lguname]`). It shows citizens **every FY 2027 budget project** whose title names Silang: what
 the NEP gave it, what the House bill (House Bill 10858) gives it, what was added or dropped,
 and the page of the source document each figure is on. Beside it, the **enacted budgets of
 2020 to 2026**: every program or project in any department whose name names Silang, and

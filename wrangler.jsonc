@@ -2,7 +2,7 @@
   // Cloudflare Workers, static assets only: no Worker code, no bindings.
   // `npm run deploy:cloudflare` builds and deploys.
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "transparency-portal-silang",
+  "name": "bettersilang",
   "compatibility_date": "2026-10-01",
   "assets": {
     "directory": "./dist",
