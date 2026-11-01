@@ -50,19 +50,22 @@ export default function Enacted() {
   }, [hash, districts.status]);
 
   const placeList = places.map((p) => p.label).join(', ');
+  // "Silang, Silang Cavite or Silang By-Pass Road": the search names, read as a sentence.
+  const labels = places.map((p) => p.label);
+  const placeOr = labels.length > 1 ? `${labels.slice(0, -1).join(', ')} or ${labels[labels.length - 1]}` : (labels[0] ?? '');
   return (
     <main className="page main">
+      {/* One short title in every state; the count and the search names go in the lede, not the heading. */}
       <PageHead
         eyebrow={<>GAA<span className="sep">·</span>FY {FIRST}–{LAST}<span className="sep">·</span>{name}</>}
-        title={
-          state.status === 'ready'
-            ? `${plural(state.value.rows.length, 'program and project', 'programs and projects')} in the ${FIRST}–${LAST} budgets name ${placeList}`
-            : `${name} in the enacted budgets, ${FIRST}–${LAST}`
-        }
+        title={`${name} in the enacted budgets, ${FIRST}–${LAST}`}
       >
         <p>
           The General Appropriations Act (GAA) is the budget Congress passes and the President signs each year: the authority to
           spend, not the money spent. These are the budgets for {FIRST} to {LAST}; the 2027 budget is still a bill.
+          {state.status === 'ready' && places.length > 0 && (
+            <> Below: {plural(state.value.rows.length, 'program or project', 'programs and projects')} whose names include {placeOr}.</>
+          )}
         </p>
       </PageHead>
 
@@ -175,6 +178,10 @@ function OfficeHistory({ office }: { office: DistrictOffice }) {
       <div className="congresses" aria-hidden="true">
         {CONGRESSES.map((c) => <span key={c.label}>{c.label}</span>)}
       </div>
+      <p className="fine bars-caption">
+        The two 2027 bars measure different things: the NEP bar is the whole office, the House bar only its named projects.
+        Neither is law yet.
+      </p>
       {office.co_served_districts.length > 0 && (
         <p className="fine">Whole office, shared with {office.co_served_districts.map((d) => d.label).join('; ')}; not split.</p>
       )}
@@ -235,7 +242,7 @@ function Programs({ result, placeList }: { result: GaaResult; placeList: string 
   return (
     <>
       <section className="section" aria-labelledby="gaa-years-h">
-        <h2 id="gaa-years-h" className="section-h">By year: the programs that name {placeList}</h2>
+        <h2 id="gaa-years-h" className="section-h">Year by year</h2>
         <div className="ystrip" role="group" aria-label="Pick a year">
           {totals.map((t) => (
             <button
@@ -318,6 +325,7 @@ function Programs({ result, placeList }: { result: GaaResult; placeList: string 
 }
 
 function ProgramRow({ r, year, many }: { r: GaaRow; year: number | null; many: boolean }) {
+  const funded = GAA_YEARS.some((y) => hasYear(r, y));
   return (
     <div className="tr" role="row">
       <span role="cell" className="td-project">
@@ -333,10 +341,12 @@ function ProgramRow({ r, year, many }: { r: GaaRow; year: number | null; many: b
         const amount = r.years[String(y)]?.amount ?? 0;
         return (
           <span role="cell" key={y} data-label={String(y)} className={`r num gcell${has ? '' : ' none'}${year === y ? ' ycol' : ''}`} title={has ? phpFull(amount) : `No appropriation under this name in ${y}`}>
-            {has ? php(amount) : '—'}
+            {has ? php(amount) : <><span aria-hidden="true">—</span><span className="sr-only">none</span></>}
           </span>
         );
       })}
+      {/* Phones print only the funded years; a row with none says so instead of going blank. */}
+      {!funded && <span className="gcell-empty">No year above ₱0</span>}
     </div>
   );
 }

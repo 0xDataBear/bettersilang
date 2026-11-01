@@ -345,7 +345,9 @@
 .hcard header .tier { flex-shrink: 0; max-width: 50%; }
 .bars { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 6px; align-items: end; }
 .bar-col { display: flex; flex-direction: column; align-items: stretch; gap: 3px; min-width: 0; }
-.bar-col.k-nep { margin-left: 6px; }
+/* The 2027 versions are not enacted and not like for like: set them apart with a visible break. */
+.bar-col.k-nep { margin-left: 4px; padding-left: 8px; border-left: 1px dashed var(--rule); }
+.bars-caption { margin-top: 6px; }
 .bar-v { font-family: var(--font-mono); font-size: 10px; color: var(--ink-2); text-align: center; white-space: nowrap; overflow: hidden; }
 .bar-track { position: relative; height: 92px; background: var(--paper-2); }
 .bar-fill { position: absolute; left: 0; right: 0; bottom: 0; min-height: 1px; }
@@ -368,7 +370,9 @@
 .gtable .tr { grid-template-columns: minmax(0, 1fr) repeat(7, 84px); gap: 10px; }
 .gname { font-weight: 500; line-height: 1.4; }
 .gcell { font-size: 13px; }
-.gcell.none { color: var(--rule); }
+/* "No line that year": a quiet dash for the eye (aria-hidden), "none" for screen readers. */
+.gcell.none { color: var(--ink-mute); }
+.gcell-empty { display: none; }
 .ycol { background: var(--accent-soft); }
 .tr.th .ycol { color: var(--accent-deep); }
 .section-gap { margin-bottom: 40px; }
@@ -475,6 +479,14 @@ code { font-family: var(--font-mono); font-size: 0.9em; background: var(--paper-
   .queries .tr { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .gtable .tr { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px 10px; }
   .gtable .gcell { text-align: left; }
+  /* A row is a program and the years it was funded: the empty years are noise on a phone. */
+  .gtable .gcell.none { display: none; }
+  /* Funded years read as one line each ("2026 ₱104.2M") and sit side by side. */
+  .gtable .tr:not(.th) { display: flex; flex-wrap: wrap; gap: 4px 16px; align-items: baseline; }
+  .gtable .tr > .td-project { flex: 1 1 100%; }
+  .gtable .tr > .r[data-label]::before { display: inline; margin: 0 6px 0 0; }
+  .gtable .gcell-empty { display: block; grid-column: 1 / -1; font-size: 13px; color: var(--ink-3); }
+  .gtable .tag-place { display: none; }
   .ystrip { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .ycell { border-bottom: 1px solid var(--rule-soft); }
   .bar-v { font-size: 8.5px; }
