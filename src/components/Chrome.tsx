@@ -4,8 +4,11 @@ import { KIND_LABELS, shortNameOf } from '../config';
 import { usePortal } from '../lib/portal-context';
 import { date } from '../lib/format';
 import { NATIONAL_URL, SOURCE_CODE_URL } from '../lib/links';
+import ThemeSwitch from './ThemeSwitch';
 
 const BETTERGOV_LOGO = '/brand/bettergov-horizontal-primary.png';
+/** The same wordmark in white, shown on dark paper. */
+const BETTERGOV_LOGO_DARK = '/brand/bettergov-horizontal-white.png';
 
 const NAV = [
   { to: '/', hash: '', label: '2027 projects' },
@@ -46,6 +49,7 @@ export function Masthead() {
             <a href={SOURCE_CODE_URL} target="_blank" rel="noopener">
               Build your own <span aria-hidden="true">↗</span>
             </a>
+            <ThemeSwitch />
           </span>
         </div>
       </div>
@@ -61,7 +65,8 @@ export function Masthead() {
         </Link>
         <a className="masthead-with" href="https://bettergov.ph" target="_blank" rel="noopener">
           <span className="label">Data from</span>
-          <img src={BETTERGOV_LOGO} alt="BetterGov.ph" width="128" height="28" />
+          <img className="logo-light" src={BETTERGOV_LOGO} alt="BetterGov.ph" width="101" height="26" />
+          <img className="logo-dark" src={BETTERGOV_LOGO_DARK} alt="BetterGov.ph" width="110" height="26" />
         </a>
       </div>
       <nav className="subnav" aria-label="Sections">

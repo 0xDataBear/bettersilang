@@ -26,9 +26,15 @@ name, not a census. The About page lists every question asked and every line rem
 **Privacy.** No cookies, no analytics, no forms. Your browser fetches the figures from
 budget.bettergov.ph and the typefaces from Google Fonts; the host keeps standard server logs.
 
-**This portal:** not deployed yet; `siteUrl` in `portal.config.ts` is a TODO. Run it
+**This portal:** live at [bettersilang.vercel.app](https://bettersilang.vercel.app). Run it
 locally with the steps below. The template's own sample, the Province of Bohol, is at
 [transparency-portal.bettergov.workers.dev](https://transparency-portal.bettergov.workers.dev).
+
+**Changes from the template**, beyond the configuration: the portal's own name and the
+independence notice; a light / dark / system theme switch in the top bar (`src/lib/theme.ts`,
+`src/components/ThemeSwitch.tsx`, the dark tokens in `src/styles/theme.css`, applied before
+first paint by `public/theme-init.js`); security headers in `vercel.json`; a share-card image
+emitted from `siteUrl`. All of it is offered back upstream.
 
 It has no backend and no database. Everything comes from the public
 [BetterGov.ph Budget API](https://budget.bettergov.ph/docs), the same data behind

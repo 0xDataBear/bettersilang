@@ -23,12 +23,12 @@
   flex-wrap: wrap;
   gap: 4px 14px;
   padding: 9px var(--gutter);
-  background: var(--accent);
+  background: var(--accent-fill);
   color: #fff;
   text-decoration: none;
   text-align: center;
 }
-.build-strip:hover { background: var(--accent-deep); color: #fff; }
+.build-strip:hover { background: var(--accent-fill-deep); color: #fff; }
 .build-strip-title { font-family: var(--font-hero); font-weight: 700; font-size: 14px; letter-spacing: 0.01em; }
 .build-strip-url { font-family: var(--font-mono); font-weight: 500; font-size: 13px; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(255, 255, 255, 0.55); }
 
@@ -36,7 +36,7 @@
 .masthead { background: var(--paper); }
 .masthead-top { border-bottom: 1px solid var(--rule-soft); font-family: var(--font-hero); font-size: 12px; font-weight: 600; }
 .masthead-top-inner { display: flex; justify-content: space-between; gap: 16px; padding-top: 8px; padding-bottom: 8px; }
-.masthead-links { display: flex; gap: 18px; flex-wrap: wrap; justify-content: flex-end; }
+.masthead-links { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; justify-content: flex-end; }
 .masthead-links a { color: var(--ink-2); text-decoration: none; }
 .masthead-links a:hover { color: var(--accent); }
 .masthead-main { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-top: 22px; padding-bottom: 20px; }
@@ -63,8 +63,18 @@
 }
 .masthead-with { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; text-decoration: none; flex-shrink: 0; }
 .masthead-with img { height: 26px; width: auto; display: block; }
+/* The BetterGov wordmark: blue on light paper, the white version on dark. */
+.masthead-with .logo-dark { display: none; }
+:root[data-theme="dark"] .masthead-with .logo-light { display: none; }
+:root[data-theme="dark"] .masthead-with .logo-dark { display: block; }
 
-.subnav { background: var(--accent-deep); }
+/* Light, dark or system: a small segmented control at the end of the top links. */
+.theme-switch { display: inline-flex; align-items: center; gap: 2px; padding: 2px; border: 1px solid var(--rule); border-radius: 999px; }
+.theme-switch button { border: 0; background: none; padding: 1px 9px; border-radius: 999px; font: inherit; font-size: 11.5px; line-height: 1.6; color: var(--ink-3); }
+.theme-switch button:hover { color: var(--ink); }
+.theme-switch button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+
+.subnav { background: var(--accent-fill-deep); }
 .subnav-inner { display: flex; gap: 28px; overflow-x: auto; scrollbar-width: none; }
 .subnav-inner::-webkit-scrollbar { display: none; }
 .subnav a {
@@ -86,8 +96,8 @@
   margin-top: 16px;
   padding-top: 12px;
   padding-bottom: 12px;
-  background: #fff6e6;
-  border: 1px solid #f0c36d;
+  background: var(--warn-bg);
+  border: 1px solid var(--warn-rule);
   font-size: 13px;
 }
 .config-warning ul { margin: 6px 0 0; padding-left: 18px; }
@@ -158,12 +168,12 @@
   background: var(--paper);
   white-space: nowrap;
 }
-.tag-warn { border-color: #e2b45c; color: #7a5410; background: #fff8e8; }
-.tag-office { border-color: #b9cdf7; color: var(--accent-deep); background: var(--accent-soft); }
+.tag-warn { border-color: var(--warn-rule); color: var(--warn-ink); background: var(--warn-bg); }
+.tag-office { border-color: var(--accent-rule); color: var(--accent-deep); background: var(--accent-soft); }
 .tag-place { border-color: var(--rule); }
 .tier { font-size: 10.5px; padding: 4px 6px; white-space: normal; line-height: 1.35; }
 .tier-A { border-color: var(--ink-2); color: var(--ink); }
-.tier-B, .tier-mixed { border-color: #e2b45c; color: #7a5410; background: #fff8e8; }
+.tier-B, .tier-mixed { border-color: var(--warn-rule); color: var(--warn-ink); background: var(--warn-bg); }
 .reasons { display: inline-flex; gap: 4px; flex-wrap: wrap; }
 
 /* ---------- Group tiles ---------- */
@@ -222,8 +232,8 @@
 }
 .button:hover { background: var(--paper-2); color: var(--ink); }
 .button-quiet { border-color: var(--rule); }
-.button-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-.button-primary:hover { background: var(--accent-deep); color: #fff; }
+.button-primary { background: var(--accent-fill); border-color: var(--accent-fill); color: #fff; }
+.button-primary:hover { background: var(--accent-fill-deep); color: #fff; }
 .link-button { border: none; background: none; padding: 0; color: var(--accent); text-decoration: underline; font: inherit; }
 
 /* ---------- Table ---------- */

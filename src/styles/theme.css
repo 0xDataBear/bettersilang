@@ -8,6 +8,8 @@
    ============================================================= */
 
 :root {
+  color-scheme: light;
+
   /* Paper and ink */
   --paper: #ffffff;
   --paper-2: #f4f7fc;
@@ -27,6 +29,18 @@
   --negative: #b8341f;
   --neutral: #8a7c5a;
 
+  /* The accent as a fill (the strip, the section band, primary buttons): white
+     text sits on it, so in dark mode it stays a strong blue while --accent,
+     used for text and small marks, gets lighter. */
+  --accent-fill: #0b4fd9;
+  --accent-fill-deep: #0a44bd;
+  --accent-rule: #b9cdf7;
+
+  /* Warnings: unconfirmed matches, shared (Tier B) offices */
+  --warn-bg: #fff8e8;
+  --warn-rule: #e2b45c;
+  --warn-ink: #7a5410;
+
   /* Type roles */
   --font-hero: "Figtree", "Manrope", -apple-system, BlinkMacSystemFont, sans-serif;
   --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
@@ -35,6 +49,39 @@
   /* Layout */
   --page: 1280px;
   --gutter: 32px;
+}
+
+/* Dark: the same roles on dark paper. `data-theme` is set on <html> before the
+   first paint by public/theme-init.js (saved choice, else the system setting)
+   and kept current by the switch in the masthead. Text colours hold at least
+   7:1 against --paper; the mute label at 4:1. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --paper: #0f131a;
+  --paper-2: #161c26;
+  --paper-3: #1d2532;
+  --rule: #313b4b;
+  --rule-soft: #232c3a;
+  --ink: #e9edf4;
+  --ink-2: #c5cdd9;
+  --ink-3: #98a2b3;
+  --ink-mute: #6e7889;
+
+  --accent: #79a4ff;
+  --accent-deep: #a3c0ff;
+  --accent-soft: #172744;
+  --positive: #7fc47f;
+  --negative: #ff8f78;
+  --neutral: #c9b784;
+
+  --accent-fill: #0b4fd9;
+  --accent-fill-deep: #0a3fa8;
+  --accent-rule: #2d4a86;
+
+  --warn-bg: #2a2410;
+  --warn-rule: #7a5f22;
+  --warn-ink: #f0c36d;
 }
 
 * { box-sizing: border-box; }
