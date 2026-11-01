@@ -95,7 +95,8 @@ export function ErrorState({ what, error, onRetry }: { what: string; error: Erro
 export function External({ href, children }: { href: string; children: ReactNode }) {
   return (
     <a href={href} target="_blank" rel="noopener">
-      {children} <span aria-hidden="true">↗</span>
+      {/* A no-break space keeps the arrow with its last word instead of wrapping alone. */}
+      {children}{' '}<span aria-hidden="true">↗</span>
     </a>
   );
 }

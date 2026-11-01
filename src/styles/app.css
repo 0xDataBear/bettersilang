@@ -9,7 +9,8 @@
   margin: 0 auto;
   padding: 0 var(--gutter);
 }
-.main { flex: 1; padding-top: 36px; padding-bottom: 72px; }
+/* At least a screen tall, so the footer starts below the fold and does not jump while data loads. */
+.main { flex: 1; min-height: 100svh; padding-top: 36px; padding-bottom: 72px; }
 .sep { color: var(--ink-mute); padding: 0 6px; }
 .small { font-size: 13px; }
 .strong { font-weight: 600; }
@@ -240,6 +241,8 @@ main:focus { outline: none; }
 }
 .button:hover { background: var(--paper-2); color: var(--ink); }
 .button-quiet { border-color: var(--rule); }
+.button:disabled { opacity: 0.45; cursor: default; }
+.button:disabled:hover { background: var(--paper); }
 .button-primary { background: var(--accent-fill); border-color: var(--accent-fill); color: #fff; }
 .button-primary:hover { background: var(--accent-fill-deep); color: #fff; }
 .link-button { border: none; background: none; padding: 0; color: var(--accent); text-decoration: underline; font: inherit; }
@@ -287,6 +290,11 @@ main:focus { outline: none; }
 .state-detail { font-family: var(--font-mono); font-size: 12px; color: var(--ink-3); }
 /* A page whose only content is loading holds its height, so the footer does not jump when data lands. */
 .main > .state:only-child { min-height: 50vh; align-items: flex-start; }
+/* The two sections that load after the page hold roughly their loaded height while loading, so what is
+   below them does not jump. Fitted to measured heights; always at or just under the real height. */
+#offices > .state { min-height: max(560px, calc(1150px - 52vw)); align-items: flex-start; }
+.reserve-office-chart > .state { min-height: max(530px, calc(900px - 50vw)); align-items: flex-start; }
+.state-reserve { min-height: 100svh; align-items: flex-start; }
 
 /* What a status means, in words, under the status tiles. */
 .group-help { margin-top: 12px; max-width: 75ch; font-size: 14px; line-height: 1.55; color: var(--ink-2); }

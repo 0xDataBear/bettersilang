@@ -41,11 +41,11 @@ export function Masthead() {
           <span className="muted">{today}</span>
           <span className="masthead-links">
             <a href={NATIONAL_URL} target="_blank" rel="noopener">
-              National picture <span aria-hidden="true">↗</span>
+              National picture&nbsp;<span aria-hidden="true">↗</span>
             </a>
             {/* The API link lives in the footer ("Budget API and MCP"); readers do not need it up here. */}
             <a href={SOURCE_CODE_URL} target="_blank" rel="noopener">
-              Build your own <span aria-hidden="true">↗</span>
+              Build your own&nbsp;<span aria-hidden="true">↗</span>
             </a>
             <ThemeToggle />
           </span>
@@ -121,15 +121,15 @@ export function Footer() {
           </li>
           <li>
             <span className="label">Every project, nationwide</span>
-            <a href={NATIONAL_URL} target="_blank" rel="noopener">budget.bettergov.ph ↗</a>
+            <a href={NATIONAL_URL} target="_blank" rel="noopener">budget.bettergov.ph&nbsp;↗</a>
           </li>
           <li>
             <span className="label">Data</span>
-            <a href={`${client.base}/docs`} target="_blank" rel="noopener">Budget API and MCP ↗</a>
+            <a href={`${client.base}/docs`} target="_blank" rel="noopener">Budget API and MCP&nbsp;↗</a>
           </li>
           <li>
             <span className="label">Open source</span>
-            <a href={SOURCE_CODE_URL} target="_blank" rel="noopener">Fork this portal for your LGU or DPWH office ↗</a>
+            <a href={SOURCE_CODE_URL} target="_blank" rel="noopener">Fork this portal for your LGU or DPWH office&nbsp;↗</a>
           </li>
         </ul>
       </div>

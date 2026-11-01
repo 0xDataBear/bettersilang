@@ -63,14 +63,17 @@ export default function Enacted() {
         <p>
           The General Appropriations Act (GAA) is the budget Congress passes and the President signs each year: the authority to
           spend, not the money spent. These are the budgets for {FIRST} to {LAST}; the 2027 budget is still a bill.
-          {state.status === 'ready' && places.length > 0 && (
-            <> Below: {plural(state.value.rows.length, 'program or project', 'programs and projects')} whose names include {placeOr}.</>
+          {/* Same sentence while loading and after, so the lede keeps its height and nothing below jumps. */}
+          {places.length > 0 && (
+            <> Below: {state.status === 'ready' ? plural(state.value.rows.length, 'program or project', 'programs and projects') : 'every program and project'} whose names include {placeOr}.</>
           )}
         </p>
       </PageHead>
 
       {/* When the program search failed too, one error below covers both. */}
-      <OfficeHistories hideError={state.status === 'error'} />
+      <div className="reserve-office-chart">
+        <OfficeHistories hideError={state.status === 'error'} />
+      </div>
 
       {places.length === 0 ? (
         <p className="fine section-gap">
@@ -78,7 +81,8 @@ export default function Enacted() {
           yearly total is shown here.
         </p>
       ) : state.status === 'loading' ? (
-        <div className="state" role="status">
+        // Holds a screen of height: the program list that replaces it is far taller, so the notes below stay put.
+        <div className="state state-reserve" role="status">
           <span className="spinner" aria-hidden="true" /> Searching every department’s programs for {placeList}
           {progress && progress.total > 0 && <> · {count(progress.done)} of {count(progress.total)}</>}…
         </div>
@@ -273,7 +277,7 @@ function Programs({ result, placeList }: { result: GaaResult; placeList: string 
           <h2 id="gaa-list-h" className="section-h">
             {narrowed ? `${count(filtered.length)} of ${plural(all.length, 'program')}` : `Every program and project (${count(all.length)})`}
           </h2>
-          <button type="button" className="button button-quiet" onClick={() => downloadText(`${config.id}-gaa-${FIRST}-${LAST}.csv`, gaaCsv(filtered))}>
+          <button type="button" className="button button-quiet" disabled={!filtered.length} onClick={() => downloadText(`${config.id}-gaa-${FIRST}-${LAST}.csv`, gaaCsv(filtered))}>
             Download CSV{narrowed ? ` (${count(filtered.length)})` : ''}
           </button>
         </div>

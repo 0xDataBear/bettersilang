@@ -175,7 +175,7 @@ function Projects({ scope, datasets }: { scope: ScopeResult; datasets: DatasetIn
           <h2 id="list-h" className="section-h">
             {narrowed ? `${count(filtered.length)} of ${plural(all.length, 'project')}` : `Every project (${count(all.length)})`}
           </h2>
-          <button type="button" className="button button-quiet" onClick={() => downloadText(`${config.id}-fy2027-projects.csv`, projectsCsv(filtered))}>
+          <button type="button" className="button button-quiet" disabled={!filtered.length} onClick={() => downloadText(`${config.id}-fy2027-projects.csv`, projectsCsv(filtered))}>
             Download CSV{narrowed ? ` (${count(filtered.length)})` : ''}
           </button>
         </div>
@@ -235,9 +235,13 @@ function Projects({ scope, datasets }: { scope: ScopeResult; datasets: DatasetIn
         </p>
         {narrowed && (
           <p className="filter-sums">
-            These {count(filtered.length)}: NEP {php(filteredSummary.nep.php)} on {count(filteredSummary.nep.rows)}
-            <span className="sep">·</span>House bill {php(filteredSummary.house.php)} on {count(filteredSummary.house.rows)}
-            <span className="sep">·</span>
+            {filtered.length > 0 && (
+              <>
+                These {count(filtered.length)}: NEP {php(filteredSummary.nep.php)} on {count(filteredSummary.nep.rows)}
+                <span className="sep">·</span>House bill {php(filteredSummary.house.php)} on {count(filteredSummary.house.rows)}
+                <span className="sep">·</span>
+              </>
+            )}
             <button type="button" className="link-button" onClick={() => { setParams(new URLSearchParams(), { replace: true }); setShown(PAGE); }}>
               Clear filters
             </button>

@@ -165,7 +165,7 @@ function ProjectView({ env }: { env: Envelope<ProjectDetail> }) {
           <div className="report">
             <p className="label">Seen this project on the ground?</p>
             {report ? (
-              <a className="button button-primary" href={report}>Report on this project ↗</a>
+              <a className="button button-primary" href={report}>Report on this project&nbsp;↗</a>
             ) : (
               <p className="small">
                 Citizen reports will go to one place for every portal, budget.bettergov.ph. Reporting is not open yet.
