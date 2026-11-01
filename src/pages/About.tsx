@@ -26,7 +26,7 @@ export default function About() {
   const { scope, overview, config } = usePortal();
   useTitle(`About the data · ${shortNameOf(config)}`);
   return (
-    <main className="page main">
+    <main id="main" tabIndex={-1} className="page main">
       <Await state={scope} what="the portal’s queries">
         {(s) => (
           <Await state={overview} what="the data notes">

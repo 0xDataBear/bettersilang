@@ -27,7 +27,7 @@ export default function Home() {
   useTitle(`Every FY 2027 project · ${shortNameOf(config)}`);
   const datasets = overview.status === 'ready' ? overview.value.data.datasets : [];
   return (
-    <main className="page main">
+    <main id="main" tabIndex={-1} className="page main">
       <Await state={scope} what="projects">
         {(s) => <Projects scope={s} datasets={datasets} />}
       </Await>
@@ -229,6 +229,10 @@ function Projects({ scope, datasets }: { scope: ScopeResult; datasets: DatasetIn
           </label>
         </div>
 
+        {/* Filter results, announced: the heading above changes silently otherwise. */}
+        <p className="sr-only" aria-live="polite">
+          {narrowed ? `${count(filtered.length)} of ${plural(all.length, 'project')} match` : `All ${plural(all.length, 'project')} shown`}
+        </p>
         {narrowed && (
           <p className="filter-sums">
             These {count(filtered.length)}: NEP {php(filteredSummary.nep.php)} on {count(filteredSummary.nep.rows)}

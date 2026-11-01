@@ -8,4 +8,10 @@
   try { pref = localStorage.getItem('theme'); } catch (e) { /* storage blocked: follow the system */ }
   var dark = pref === 'dark' || (pref !== 'light' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
   document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+  // The browser bar follows the page (the meta tag comes later in <head>, so set it once it exists).
+  var color = dark ? '#0f131a' : '#ffffff';
+  document.addEventListener('DOMContentLoaded', function () {
+    var m = document.querySelector('meta[name="theme-color"]');
+    if (m) m.setAttribute('content', color);
+  });
 })();

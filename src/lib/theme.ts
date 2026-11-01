@@ -28,8 +28,13 @@ export function resolveTheme(pref: ThemePref): Theme {
   return typeof matchMedia === 'function' && matchMedia(DARK_QUERY).matches ? 'dark' : 'light';
 }
 
+/** The browser bar matches the page: white paper in light, dark paper in dark. Kept in step with theme.css. */
+const THEME_COLOR: Record<Theme, string> = { light: '#ffffff', dark: '#0f131a' };
+
 export function applyThemePref(pref: ThemePref): void {
-  document.documentElement.setAttribute('data-theme', resolveTheme(pref));
+  const theme = resolveTheme(pref);
+  document.documentElement.setAttribute('data-theme', theme);
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', THEME_COLOR[theme]);
 }
 
 /** Persist the choice (or forget it, for "system") and apply it. */

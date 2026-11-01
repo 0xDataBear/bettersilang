@@ -15,6 +15,15 @@
 .strong { font-weight: 600; }
 .r { text-align: right; }
 
+/* ---------- Skip link: hidden until it has keyboard focus ---------- */
+.skip-link {
+  position: absolute; left: 12px; top: -60px; z-index: 50;
+  padding: 12px 16px; background: var(--ink); color: var(--paper);
+  font-family: var(--font-hero); font-weight: 700; font-size: 14px; text-decoration: none;
+}
+.skip-link:focus { top: 12px; color: var(--paper); }
+main:focus { outline: none; }
+
 /* ---------- "Create your own" strip (above the masthead) ---------- */
 .build-strip {
   display: flex;
@@ -65,7 +74,7 @@
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
   height: 28px; padding: 0 10px;
   border: 1px solid var(--rule); border-radius: 999px; background: none;
-  font: inherit; font-size: 11.5px; color: var(--ink-2);
+  font: inherit; font-size: 12px; color: var(--ink-2);
   transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1), border-color 160ms ease, color 160ms ease;
 }
 .theme-toggle svg { display: block; flex-shrink: 0; }
@@ -130,7 +139,7 @@
   margin-top: 8px !important;
 }
 .stat-accent { color: var(--accent); }
-.stat-sub { font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); margin-top: 6px !important; line-height: 1.5; }
+.stat-sub { font-family: var(--font-mono); font-size: 12px; color: var(--ink-3); margin-top: 6px !important; line-height: 1.5; }
 
 /* ---------- Sections ---------- */
 .section { margin: 0 0 40px; }
@@ -150,7 +159,7 @@
 .status-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; display: inline-block; }
 .g-house_only { background: var(--accent); }
 .g-nep_only { background: transparent; box-shadow: inset 0 0 0 2px var(--ink-3); }
-.g-unchanged { background: var(--rule); }
+.g-unchanged { background: var(--ink-mute); }   /* filled grey; the NEP-only dot is a ring */
 .g-increased { background: var(--positive); }
 .g-decreased { background: var(--negative); }
 .g-scope_review { background: var(--neutral); }
@@ -158,7 +167,7 @@
 .tag {
   display: inline-block;
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.04em;
   line-height: 1;
   padding: 3px 5px;
@@ -170,7 +179,7 @@
 .tag-warn { border-color: var(--warn-rule); color: var(--warn-ink); background: var(--warn-bg); }
 .tag-office { border-color: var(--accent-rule); color: var(--accent-deep); background: var(--accent-soft); }
 .tag-place { border-color: var(--rule); }
-.tier { font-size: 10.5px; padding: 4px 6px; white-space: normal; line-height: 1.35; }
+.tier { font-size: 12px; padding: 4px 6px; white-space: normal; line-height: 1.35; }
 .tier-A { border-color: var(--ink-2); color: var(--ink); }
 .tier-B, .tier-mixed { border-color: var(--warn-rule); color: var(--warn-ink); background: var(--warn-bg); }
 .reasons { display: inline-flex; gap: 4px; flex-wrap: wrap; }
@@ -195,7 +204,7 @@
 .group-tile.active { background: var(--accent-soft); box-shadow: inset 0 -3px 0 var(--accent); }
 .group-tile:disabled { cursor: default; opacity: 0.5; }
 .group-label { display: flex; align-items: center; gap: 7px; font-family: var(--font-hero); font-weight: 700; font-size: 14px; line-height: 1.25; }
-.group-tile .label { font-size: 9.5px; }
+.group-tile .label { font-size: 11px; }
 .group-count { font-family: var(--font-hero); font-weight: 700; font-size: 26px; margin-top: 6px; }
 .group-php { font-family: var(--font-mono); font-size: 12px; color: var(--ink-3); }
 
@@ -258,6 +267,10 @@
 .td-project { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
 .project-title { color: var(--ink); text-decoration: none; font-weight: 500; line-height: 1.4; }
 .project-title:hover { color: var(--accent); text-decoration: underline; }
+/* The whole row opens the project, not only the title text (one link, stretched over the row). */
+.table .tr:not(.th) { position: relative; }
+.project-title::after { content: ""; position: absolute; inset: 0; }
+.table .tr:not(.th):has(.project-title) { cursor: pointer; }
 .project-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; font-size: 12.5px; color: var(--ink-3); }
 .project-meta .label { color: var(--ink-2); }
 .delta.up { color: var(--positive); }
@@ -316,7 +329,7 @@
 .ocard-figs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--rule); }
 .ocard-figs > div { padding: 8px 8px 10px 0; }
 .ocard-figs > div + div { padding-left: 10px; border-left: 1px solid var(--rule-soft); }
-.ocard-figs .label { font-size: 9.5px; }
+.ocard-figs .label { font-size: 11px; }
 .ocard-figs dd { margin: 4px 0 0; font-family: var(--font-hero); font-weight: 700; font-size: 20px; line-height: 1.15; }
 .ocard-lines { text-decoration: none; }
 .ocard-groups { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 0; font-size: 13px; }
@@ -344,10 +357,10 @@
 .odistrict-photo { width: 40px; height: 50px; object-fit: cover; background: var(--paper-3); flex-shrink: 0; display: block; }
 .odistrict-label { font-family: var(--font-hero); font-weight: 700; font-size: 14.5px; line-height: 1.25; }
 .odistrict-links { display: flex; flex-wrap: wrap; gap: 2px 10px; margin-top: 2px !important; font-size: 12px; }
-.credit { font-size: 11px; color: var(--ink-mute); }
+.credit { font-size: 12px; color: var(--ink-mute); }
 
 /* ---------- Enacted budgets 2020–2026 (/gaa) ---------- */
-.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: -4px 0 14px; font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: -4px 0 14px; font-family: var(--font-mono); font-size: 12px; color: var(--ink-3); }
 .legend span { display: inline-flex; align-items: center; gap: 6px; }
 .sw { display: inline-block; width: 12px; height: 12px; }
 .sw-gaa, .k-gaa .bar-fill { background: var(--ink-2); }
@@ -363,12 +376,12 @@
 /* The 2027 versions are not enacted and not like for like: set them apart with a visible break. */
 .bar-col.k-nep { margin-left: 4px; padding-left: 8px; border-left: 1px dashed var(--rule); }
 .bars-caption { margin-top: 6px; }
-.bar-v { font-family: var(--font-mono); font-size: 10px; color: var(--ink-2); text-align: center; white-space: nowrap; overflow: hidden; }
+.bar-v { font-family: var(--font-mono); font-size: 12px; color: var(--ink-2); text-align: center; white-space: nowrap; overflow: hidden; }
 .bar-track { position: relative; height: 92px; background: var(--paper-2); }
 .bar-fill { position: absolute; left: 0; right: 0; bottom: 0; min-height: 1px; }
-.bar-x { font-family: var(--font-mono); font-size: 10px; color: var(--ink-3); text-align: center; }
+.bar-x { font-family: var(--font-mono); font-size: 12px; color: var(--ink-3); text-align: center; }
 .congresses { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 4px; }
-.congresses span { border-top: 1px solid var(--rule); padding-top: 3px; font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-mute); text-align: center; }
+.congresses span { border-top: 1px solid var(--rule); padding-top: 3px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-mute); text-align: center; }
 .hcard .fine { margin-top: 8px; }
 
 .ystrip { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); border-top: 1px solid var(--ink); border-bottom: 1px solid var(--rule); }
@@ -380,7 +393,7 @@
 .ybar span { position: absolute; left: 0; right: 0; bottom: 0; background: var(--ink-2); min-height: 1px; }
 .ycell.active .ybar span { background: var(--accent); }
 .yv { font-family: var(--font-hero); font-weight: 700; font-size: 18px; }
-.ysub { font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-3); }
+.ysub { font-family: var(--font-mono); font-size: 12px; color: var(--ink-3); }
 
 .gtable .tr { grid-template-columns: minmax(0, 1fr) repeat(7, 84px); gap: 10px; }
 .gname { font-weight: 500; line-height: 1.4; }
@@ -432,7 +445,7 @@ code { font-family: var(--font-mono); font-size: 0.9em; background: var(--paper-
 .footer { border-top: 1px solid var(--ink); background: var(--paper-2); margin-top: auto; }
 .footer-inner { padding-top: 28px; padding-bottom: 40px; }
 .footer-source { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 12px; }
-.footer-notice { font-size: 12.5px; color: var(--ink-2); max-width: 900px; margin: 0 0 20px; line-height: 1.55; }
+.footer-notice { font-size: 12.5px; color: var(--ink-2); max-width: 900px; margin: 0 0 20px; line-height: 1.55; overflow-wrap: anywhere; }   /* the notice ends in a long URL: let it wrap */
 .footer-links { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; font-size: 13.5px; }
 .footer-links li { display: flex; flex-direction: column; gap: 4px; }
 
@@ -477,7 +490,8 @@ code { font-family: var(--font-mono); font-size: 0.9em; background: var(--paper-
   .ocard-head .tier { max-width: none; }
 
   /* The table becomes one card per project. */
-  .tr.th { display: none; }
+  /* Column headers leave the screen but stay in the accessibility tree. */
+  .tr.th { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
   .tr { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px 12px; padding: 14px 0; }
   .td-project, .td-status { grid-column: 1 / -1; }
   .tr > .r[data-label] { text-align: left; }
@@ -485,7 +499,7 @@ code { font-family: var(--font-mono); font-size: 0.9em; background: var(--paper-
     content: attr(data-label);
     display: block;
     font-family: var(--font-mono);
-    font-size: 9.5px;
+    font-size: 11px;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--ink-3);
@@ -502,9 +516,20 @@ code { font-family: var(--font-mono); font-size: 0.9em; background: var(--paper-
   .gtable .tr > .r[data-label]::before { display: inline; margin: 0 6px 0 0; }
   .gtable .gcell-empty { display: block; grid-column: 1 / -1; font-size: 13px; color: var(--ink-3); }
   .gtable .tag-place { display: none; }
+  /* The per-row department link is a tiny target on every row; the Department filter covers it on phones. */
+  .gtable .project-meta a { display: none; }
+
+  /* Thumb-sized targets: controls and stand-alone links reach 44 px (inline links inside prose are exempt). */
+  .button, .field input, .field select { height: 44px; }
+  .link-button { display: inline-flex; align-items: center; min-height: 44px; }
+  .masthead-with { min-height: 44px; justify-content: center; }
+  .crumbs a, .odistrict-links a, .links a, .state-actions a, .docs a, .queries .tr a { display: inline-flex; align-items: center; min-height: 44px; }
+  .links { line-height: 1.4; }
+  .masthead-title { min-height: 44px; }
+  .ocard-portal a, .footer-links a, .amounts td a { display: inline-flex; align-items: center; min-height: 44px; }
   .ystrip { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .ycell { border-bottom: 1px solid var(--rule-soft); }
-  .bar-v { font-size: 8.5px; }
+  .bar-v { font-size: 10px; }   /* nine narrow bars; every value is also in the chart's aria-label */
   .bar-track { height: 70px; }
   .bars { gap: 3px; }
   .queries .tr > span:first-child { grid-column: 1 / -1; }

@@ -19,7 +19,7 @@
   --ink: #11151c;
   --ink-2: #2b3340;
   --ink-3: #5b6373;
-  --ink-mute: #8a92a1;
+  --ink-mute: #646c7b;      /* ≥4.5:1 on paper, paper-2 and accent-soft */
 
   /* Accents */
   --accent: #0b4fd9;        /* BetterGov blue */
@@ -66,7 +66,7 @@
   --ink: #e9edf4;
   --ink-2: #c5cdd9;
   --ink-3: #98a2b3;
-  --ink-mute: #6e7889;
+  --ink-mute: #868fa0;
 
   --accent: #79a4ff;
   --accent-deep: #a3c0ff;
@@ -135,7 +135,7 @@ h1, h2, h3 {
 .eyebrow .sep { color: var(--ink-mute); padding: 0 6px; }
 .label {
   font-family: var(--font-mono);
-  font-size: 10.5px;
+  font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ink-3);

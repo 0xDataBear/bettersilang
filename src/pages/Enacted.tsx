@@ -54,7 +54,7 @@ export default function Enacted() {
   const labels = places.map((p) => p.label);
   const placeOr = labels.length > 1 ? `${labels.slice(0, -1).join(', ')} or ${labels[labels.length - 1]}` : (labels[0] ?? '');
   return (
-    <main className="page main">
+    <main id="main" tabIndex={-1} className="page main">
       {/* One short title in every state; the count and the search names go in the lede, not the heading. */}
       <PageHead
         eyebrow={<>GAA<span className="sep">·</span>FY {FIRST}–{LAST}<span className="sep">·</span>{name}</>}
@@ -297,6 +297,9 @@ function Programs({ result, placeList }: { result: GaaResult; placeList: string 
             </select>
           </label>
         </div>
+        <p className="sr-only" aria-live="polite">
+          {narrowed ? `${count(filtered.length)} of ${plural(all.length, 'program')} match` : `All ${plural(all.length, 'program')} shown`}
+        </p>
         {narrowed && (
           <p className="filter-sums">
             {year ? <>{year}: {php(filtered.reduce((a, r) => a + (r.years[String(year)]?.amount ?? 0), 0))} across these {count(filtered.length)}</> : <>{count(filtered.length)} shown</>}

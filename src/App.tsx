@@ -14,6 +14,8 @@ export default function App() {
   return (
     <>
       <ScrollToTop />
+      {/* First Tab stop: past the strip, top links, theme button and nav, straight to the page. */}
+      <a className="skip-link" href="#main">Skip to content</a>
       <Masthead />
       {problems.length > 0 && (
         <div className="page config-warning" role="alert">
@@ -31,7 +33,7 @@ export default function App() {
         <Route
           path="*"
           element={
-            <main className="page main">
+            <main id="main" tabIndex={-1} className="page main">
               <p className="state">This page does not exist. <Link to="/">See every project</Link></p>
             </main>
           }
