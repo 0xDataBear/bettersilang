@@ -52,8 +52,17 @@ export interface PortalConfig {
   name: string;
   /** Short form for headings: "Bohol". Defaults to `name`. */
   shortName?: string;
-  /** Who runs this copy of the portal. Shown in the footer. */
-  operator: { name: string; url?: string; email?: string };
+  /**
+   * One plain line under the name in the masthead: what this is and who it is
+   * for ("An unofficial budget watch for Silang, Cavite"). Defaults to the
+   * kind and the years covered.
+   */
+  tagline?: string;
+  /**
+   * Who runs this copy of the portal. Shown in the footer. `note` is plain
+   * text after the name ("a private citizen, not the municipal government").
+   */
+  operator: { name: string; url?: string; email?: string; note?: string };
   /** Optional logo: a path under public/ ("/brand/lgu-seal.png") or a URL. */
   logo?: string;
   /** Canonical URL of this deployment, for link previews. */

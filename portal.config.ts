@@ -22,11 +22,13 @@ export default defineConfig({
   // the municipal government's own site. Prose uses shortName.
   name: 'BetterSilang',
   shortName: 'Silang',
-  // The footer reads "Silang, run by <operator.name>", so the name carries the
-  // independence notice onto every page.
+  // Under the name in the masthead, on every page: what this is, before any figure.
+  tagline: 'An unofficial budget watch for Silang, Cavite',
+  // The footer reads "Silang, run by <name>, <note>".
   operator: {
-    name: '0xDataBear, a private citizen, not affiliated with the Municipal Government of Silang',
+    name: '0xDataBear',
     url: 'https://github.com/0xDataBear',
+    note: 'a private citizen, not affiliated with the Municipal Government of Silang',
   },
   // Canonical URL: link previews and the share card. Change it to the .org domain once that exists.
   siteUrl: 'https://bettersilang.vercel.app',

@@ -31,9 +31,11 @@ locally with the steps below. The template's own sample, the Province of Bohol, 
 [transparency-portal.bettergov.workers.dev](https://transparency-portal.bettergov.workers.dev).
 
 **Changes from the template**, beyond the configuration: the portal's own name and the
-independence notice; a light / dark / system theme switch in the top bar (`src/lib/theme.ts`,
-`src/components/ThemeSwitch.tsx`, the dark tokens in `src/styles/theme.css`, applied before
-first paint by `public/theme-init.js`); security headers in `vercel.json`; a share-card image
+independence notice, carried by two new config fields (`tagline` under the name, `operator.note`
+in the footer); a theme button in the top bar that cycles light, dark and "follows the device"
+(`src/lib/theme.ts`, `src/components/ThemeToggle.tsx`, the dark tokens in `src/styles/theme.css`,
+applied before first paint by `public/theme-init.js`); a phone-first masthead (no campaign strip
+under 860 px, thumb-sized top links); security headers in `vercel.json`; a share-card image
 emitted from `siteUrl`. All of it is offered back upstream.
 
 It has no backend and no database. Everything comes from the public

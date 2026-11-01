@@ -43,16 +43,6 @@
 .masthead-title { display: flex; align-items: center; gap: 14px; color: var(--ink); text-decoration: none; min-width: 0; }
 .masthead-title:hover { color: var(--ink); }
 .masthead-logo { height: 52px; width: auto; }
-.masthead-kicker {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 10.5px;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 6px;
-}
 .masthead-name {
   display: block;
   font-family: var(--font-hero);
@@ -61,6 +51,8 @@
   letter-spacing: -0.025em;
   line-height: 1.05;
 }
+/* What this is, in a sentence, under the name. */
+.masthead-tagline { display: block; margin-top: 5px; font-size: 13px; line-height: 1.35; color: var(--ink-3); text-wrap: balance; }
 .masthead-with { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; text-decoration: none; flex-shrink: 0; }
 .masthead-with img { height: 26px; width: auto; display: block; }
 /* The BetterGov wordmark: blue on light paper, the white version on dark. */
@@ -68,11 +60,18 @@
 :root[data-theme="dark"] .masthead-with .logo-light { display: none; }
 :root[data-theme="dark"] .masthead-with .logo-dark { display: block; }
 
-/* Light, dark or system: a small segmented control at the end of the top links. */
-.theme-switch { display: inline-flex; align-items: center; gap: 2px; padding: 2px; border: 1px solid var(--rule); border-radius: 999px; }
-.theme-switch button { border: 0; background: none; padding: 1px 9px; border-radius: 999px; font: inherit; font-size: 11.5px; line-height: 1.6; color: var(--ink-3); }
-.theme-switch button:hover { color: var(--ink); }
-.theme-switch button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+/* One button cycles the colour theme: light → dark → follows the device. */
+.theme-toggle {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  height: 28px; padding: 0 10px;
+  border: 1px solid var(--rule); border-radius: 999px; background: none;
+  font: inherit; font-size: 11.5px; color: var(--ink-2);
+  transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1), border-color 160ms ease, color 160ms ease;
+}
+.theme-toggle svg { display: block; flex-shrink: 0; }
+.theme-toggle:hover { border-color: var(--ink-3); color: var(--ink); }
+.theme-toggle:active { transform: scale(0.96); }
+@media (prefers-reduced-motion: reduce) { .theme-toggle { transition: none; } }
 
 .subnav { background: var(--accent-fill-deep); }
 .subnav-inner { display: flex; gap: 28px; overflow-x: auto; scrollbar-width: none; }
@@ -421,11 +420,24 @@ code { font-family: var(--font-mono); font-size: 0.9em; background: var(--paper-
 
 @media (max-width: 860px) {
   :root { --gutter: 18px; }
+  /* The first phone screen belongs to the reader: no campaign strip (the footer
+     still invites forks), a one-row top bar with thumb-sized targets, a tight
+     masthead, and the page title as close to the top as the nav allows. */
+  .build-strip { display: none; }
+  .masthead-top-inner { padding-top: 2px; padding-bottom: 2px; }
   .masthead-top-inner > span:first-child { display: none; }
   .masthead-links { justify-content: flex-start; gap: 14px; }
+  .masthead-links a { padding: 13px 0; }
+  .theme-toggle { width: 44px; height: 44px; padding: 0; margin-left: auto; }
+  .theme-toggle-label { display: none; }
+  .masthead-main { padding-top: 12px; padding-bottom: 10px; }
   .masthead-name { font-size: 22px; }
+  .masthead-tagline { font-size: 12px; margin-top: 3px; }
   .masthead-with .label { display: none; }
   .masthead-with img { height: 20px; }
+  .main { padding-top: 22px; }
+  .page-head { margin-bottom: 22px; }
+  .page-head .eyebrow { margin-bottom: 8px; }
   .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .stats > div { padding-left: 0 !important; padding-right: 12px; border-right: none; }
   .stats > div:nth-child(-n + 2) { border-bottom: 1px solid var(--rule-soft); }

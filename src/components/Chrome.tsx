@@ -4,7 +4,7 @@ import { KIND_LABELS, shortNameOf } from '../config';
 import { usePortal } from '../lib/portal-context';
 import { date } from '../lib/format';
 import { NATIONAL_URL, SOURCE_CODE_URL } from '../lib/links';
-import ThemeSwitch from './ThemeSwitch';
+import ThemeToggle from './ThemeToggle';
 
 const BETTERGOV_LOGO = '/brand/bettergov-horizontal-primary.png';
 /** The same wordmark in white, shown on dark paper. */
@@ -18,7 +18,7 @@ const NAV = [
 ];
 
 export function Masthead() {
-  const { config, client } = usePortal();
+  const { config } = usePortal();
   const { pathname, hash } = useLocation();
   const today = useMemo(
     () => new Date().toLocaleDateString('en-PH', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }),
@@ -43,13 +43,11 @@ export function Masthead() {
             <a href={NATIONAL_URL} target="_blank" rel="noopener">
               National picture <span aria-hidden="true">↗</span>
             </a>
-            <a href={`${client.base}/docs`} target="_blank" rel="noopener">
-              API <span aria-hidden="true">↗</span>
-            </a>
+            {/* The API link lives in the footer ("Budget API and MCP"); readers do not need it up here. */}
             <a href={SOURCE_CODE_URL} target="_blank" rel="noopener">
               Build your own <span aria-hidden="true">↗</span>
             </a>
-            <ThemeSwitch />
+            <ThemeToggle />
           </span>
         </div>
       </div>
@@ -57,10 +55,11 @@ export function Masthead() {
         <Link to="/" className="masthead-title">
           {config.logo && <img src={config.logo} alt="" className="masthead-logo" />}
           <span>
-            <span className="masthead-kicker">
-              {KIND_LABELS[config.kind]} <span aria-hidden="true">·</span> Budgets 2020–2027
-            </span>
             <span className="masthead-name">{config.name}</span>
+            {/* The name speaks first; the line under it says what this is. */}
+            <span className="masthead-tagline">
+              {config.tagline ?? <>{KIND_LABELS[config.kind]} <span aria-hidden="true">·</span> Budgets 2020–2027</>}
+            </span>
           </span>
         </Link>
         <a className="masthead-with" href="https://bettergov.ph" target="_blank" rel="noopener">
@@ -114,6 +113,7 @@ export function Footer() {
               ) : (
                 config.operator.name
               )}
+              {config.operator.note && <>, {config.operator.note}</>}
               {config.operator.email && (
                 <> · <a href={`mailto:${config.operator.email}`}>{config.operator.email}</a></>
               )}
