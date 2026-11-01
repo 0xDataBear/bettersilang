@@ -93,11 +93,23 @@ function Projects({ scope, datasets }: { scope: ScopeResult; datasets: DatasetIn
     return [...n.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'en', { numeric: true }));
   }, [all]);
 
+  // Every reason a row can be here for, with how many rows it covers.
   const reasons = useMemo(() => {
-    const seen = new Map<string, string>();
-    for (const p of all) for (const r of p.reasons) seen.set(`${r.kind}:${r.label}`, r.kind === 'office' ? `Office: ${shortOffice(r.label)}` : `Title names ${r.label}`);
+    const seen = new Map<string, { label: string; rows: number }>();
+    for (const p of all) {
+      for (const r of p.reasons) {
+        const key = `${r.kind}:${r.label}`;
+        const entry = seen.get(key) ?? { label: r.kind === 'office' ? `Office: ${shortOffice(r.label)}` : `Title names ${r.label}`, rows: 0 };
+        entry.rows++;
+        seen.set(key, entry);
+      }
+    }
     return [...seen.entries()];
   }, [all]);
+  // A reason that covers every row cannot narrow the list; offer the filter only when one can.
+  const reasonFilterUseful = reasons.some(([, r]) => r.rows < all.length);
+  // Per-row reason tags earn their place only when rows differ in kind (office vs title).
+  const showReasonTags = all.some((p) => p.reasons.some((r) => r.kind === 'office'));
 
   const filtered = useMemo(() => {
     const words = q.toLowerCase().split(/\s+/).filter(Boolean);
@@ -199,12 +211,12 @@ function Projects({ scope, datasets }: { scope: ScopeResult; datasets: DatasetIn
               </select>
             </label>
           )}
-          {reasons.length > 1 && (
+          {reasonFilterUseful && (
             <label className="field">
               <span className="label">Listed because</span>
               <select value={why} onChange={(e) => setParam('why', e.target.value)}>
                 <option value="">Any reason</option>
-                {reasons.map(([k, label]) => <option key={k} value={k}>{label}</option>)}
+                {reasons.map(([k, r]) => <option key={k} value={k}>{r.label} ({count(r.rows)})</option>)}
               </select>
             </label>
           )}
@@ -227,7 +239,7 @@ function Projects({ scope, datasets }: { scope: ScopeResult; datasets: DatasetIn
           </p>
         )}
 
-        <ProjectTable rows={filtered.slice(0, shown)} programName={programName} />
+        <ProjectTable rows={filtered.slice(0, shown)} programName={programName} showReasons={showReasonTags} />
 
         {filtered.length === 0 && <p className="state">No project matches. Try fewer words or clear the filters.</p>}
         {filtered.length > shown && (
@@ -297,12 +309,12 @@ function Stats({ summary, programName }: { summary: Summary; programName: (k: Da
         <dd className="stat-sub">{programs || 'none'}</dd>
       </div>
       <div>
-        <dt className="label">NEP</dt>
+        <dt className="label">NEP, the President’s proposal</dt>
         <dd className="stat num">{php(summary.nep.php)}</dd>
-        <dd className="stat-sub">{plural(summary.nep.rows, 'project')} · the budget the President submits</dd>
+        <dd className="stat-sub">{plural(summary.nep.rows, 'project')} · the budget the President submitted to Congress</dd>
       </div>
       <div>
-        <dt className="label">House bill</dt>
+        <dt className="label">House bill, the House’s version</dt>
         <dd className="stat num stat-accent">{php(summary.house.php)}</dd>
         <dd className="stat-sub">{plural(summary.house.rows, 'project')} · compared with the NEP, not added</dd>
       </div>
@@ -315,7 +327,7 @@ function Stats({ summary, programName }: { summary: Summary; programName: (k: Da
   );
 }
 
-function ProjectTable({ rows, programName }: { rows: ScopedProject[]; programName: (k: DatasetKey) => string }) {
+function ProjectTable({ rows, programName, showReasons }: { rows: ScopedProject[]; programName: (k: DatasetKey) => string; showReasons: boolean }) {
   if (!rows.length) return null;
   return (
     <div className="table" role="table" aria-label="Projects">
@@ -334,7 +346,7 @@ function ProjectTable({ rows, programName }: { rows: ScopedProject[]; programNam
               <span className="label">{programName(p.dataset)}</span>
               {p.office && <span>{shortOffice(p.office)}</span>}
               {p.region && <span>{p.region}</span>}
-              <ReasonTags reasons={p.reasons} />
+              {showReasons && <ReasonTags reasons={p.reasons} />}
             </span>
           </span>
           <span role="cell" className="td-status"><StatusChip group={p.bridge_group} label={p.status_label} held={p.held} /></span>

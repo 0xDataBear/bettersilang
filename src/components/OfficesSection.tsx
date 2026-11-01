@@ -12,6 +12,7 @@
 import { Link } from 'react-router-dom';
 import type { DistrictCard, DistrictOffice, Envelope } from '../api/types';
 import { BRIDGE_GROUPS } from '../api/types';
+import { shortNameOf } from '../config';
 import { count, php, phpDelta, plural } from '../lib/format';
 import { usePortal } from '../lib/portal-context';
 import type { QueryReport, ScopedProject } from '../lib/scope';
@@ -124,6 +125,7 @@ function Offices({ list, queries, projects }: { list: Envelope<DistrictCard>[]; 
 }
 
 function Office({ view }: { view: OfficeView }) {
+  const { config } = usePortal();
   const { office, printed, query, lines, districts } = view;
   const f = office.fy2027;
   const wholeNep = office.years?.find((y) => y.fy === 2027 && y.stage === 'nep')?.php ?? null;
@@ -133,6 +135,17 @@ function Office({ view }: { view: OfficeView }) {
   const groups = f ? BRIDGE_GROUPS.map((g) => f.bridge.groups[g]).filter((c) => c && c.rows > 0) : [];
   const unconfirmed = f?.annotations?.unconfirmed_rows ?? 0;
   const held = f?.office_change?.rows ?? 0;
+  // Districts the office serves that this portal is not about (no card of their own here).
+  const others = districts.filter((d) => !d.card);
+  const place = shortNameOf(config);
+
+  const notes = (
+    <>
+      {unconfirmed > 0 && <> Includes {plural(unconfirmed, 'unconfirmed match', 'unconfirmed matches')} ({php(f?.annotations?.unconfirmed_php)}).</>}
+      {held > 0 && <> {plural(held, 'line')} whose two versions name different offices {held === 1 ? 'is' : 'are'} not in these figures.</>}{' '}
+      <Link to={`/gaa#${office.id}`}>Its budget each year since 2020 →</Link>
+    </>
+  );
 
   return (
     <article className="ocard">
@@ -144,41 +157,65 @@ function Office({ view }: { view: OfficeView }) {
         <span className={`tag tier tier-${office.tier}`}>{office.tier_text}</span>
       </header>
 
-      <dl className="ocard-figs">
-        <div>
-          <dt className="label">In this portal</dt>
-          <dd>{lines ? <Link to={filter()} className="ocard-lines">{plural(lines, 'line')} →</Link> : <span className="muted">none</span>}</dd>
-        </div>
-        <div>
-          <dt className="label">NEP</dt>
-          <dd className="num">{php(f?.nep_php)}</dd>
-        </div>
-        <div>
-          <dt className="label">House bill</dt>
-          <dd className="num stat-accent">{php(f?.hgab3_php)}</dd>
-        </div>
-        <div>
-          <dt className="label">Change</dt>
-          <dd className="num">{phpDelta(change)}</dd>
-        </div>
-      </dl>
-
-      {groups.length > 0 && (
-        <p className="ocard-groups">
-          {groups.map((c) => {
-            const text = <><span className={`status-dot g-${c.group}`} aria-hidden="true" />{count(c.rows)} {c.label.charAt(0).toLowerCase() + c.label.slice(1)}</>;
-            // These counts are the whole office's: link them only when all of its lines are in the portal.
-            return query ? <Link key={c.group} to={filter(c.group)}>{text}</Link> : <span key={c.group}>{text}</span>;
-          })}
-        </p>
+      {query ? (
+        // The whole ledger is in the portal: the office's figures are the portal's figures.
+        <>
+          <dl className="ocard-figs">
+            <div>
+              <dt className="label">In this portal</dt>
+              <dd>{lines ? <Link to={filter()} className="ocard-lines">{plural(lines, 'line')} →</Link> : <span className="muted">none</span>}</dd>
+            </div>
+            <div>
+              <dt className="label">NEP</dt>
+              <dd className="num">{php(f?.nep_php)}</dd>
+            </div>
+            <div>
+              <dt className="label">House bill</dt>
+              <dd className="num stat-accent">{php(f?.hgab3_php)}</dd>
+            </div>
+            <div>
+              <dt className="label">Change</dt>
+              <dd className="num">{phpDelta(change)}</dd>
+            </div>
+          </dl>
+          {groups.length > 0 && (
+            <p className="ocard-groups">
+              {groups.map((c) => (
+                <Link key={c.group} to={filter(c.group)}>
+                  <span className={`status-dot g-${c.group}`} aria-hidden="true" />{count(c.rows)} {c.label.charAt(0).toLowerCase() + c.label.slice(1)}
+                </Link>
+              ))}
+            </p>
+          )}
+          <p className="ocard-note">
+            Named projects{f ? <>: {count(f.nep_records)} in the NEP, {count(f.hgab3_records)} in the House bill</> : null}.
+            {wholeNep != null && <> The whole office in the NEP: {php(wholeNep)}.</>}
+            {notes}
+          </p>
+        </>
+      ) : (
+        // Only this office's lines that name the place are in the portal, so its
+        // own figures are a different thing from the portal's. Say so first, keep
+        // the portal's number prominent, and set the office's figures as a sentence.
+        <>
+          <p className="ocard-lead">
+            {place}’s projects are built by this office
+            {others.length > 0 && <>, which also serves {others.map((d) => d.label).join('; ')}</>}.
+            The figures below are the whole office{districts.length > 1 && <> across all {districts.length} districts</>}, not {place}’s.
+          </p>
+          <p className="ocard-portal">
+            {lines ? <Link to={filter()}>{plural(lines, 'line')} in this portal →</Link> : <span className="muted">No line in this portal is listed under it.</span>}
+          </p>
+          <p className="ocard-whole">
+            <strong>Whole office, 2027 named projects:</strong> NEP <span className="num">{php(f?.nep_php)}</span>, House bill{' '}
+            <span className="num">{php(f?.hgab3_php)}</span>
+            {change != null && <>, a change of <span className="num">{phpDelta(change)}</span></>}
+            {f && <> ({count(f.nep_records)} in the NEP, {count(f.hgab3_records)} in the House bill)</>}.
+            {wholeNep != null && <> Its whole NEP allocation: <span className="num">{php(wholeNep)}</span>.</>}
+            {notes}
+          </p>
+        </>
       )}
-      <p className="ocard-note">
-        Named projects{f ? <>: {count(f.nep_records)} in the NEP, {count(f.hgab3_records)} in the House bill</> : null}.
-        {wholeNep != null && <> The whole office in the NEP: {php(wholeNep)}.</>}
-        {unconfirmed > 0 && <> Includes {plural(unconfirmed, 'unconfirmed match', 'unconfirmed matches')} ({php(f?.annotations?.unconfirmed_php)}).</>}
-        {held > 0 && <> {plural(held, 'line')} whose two versions name different offices {held === 1 ? 'is' : 'are'} not in these figures.</>}{' '}
-        <Link to={`/gaa#${office.id}`}>Its budget each year since 2020 →</Link>
-      </p>
 
       <div className="ocard-districts">
         <p className="label">
