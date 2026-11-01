@@ -19,17 +19,25 @@ export default defineConfig({
   kind: 'municipality',
   name: 'Municipality of Silang, Cavite',
   shortName: 'Silang',
-  operator: { name: '0xDataBear', url: 'https://github.com/0xDataBear' },
+  // The footer reads "Silang, run by <operator.name>", so the name carries the
+  // independence notice onto every page.
+  operator: {
+    name: '0xDataBear, a private citizen, not affiliated with the Municipal Government of Silang',
+    url: 'https://github.com/0xDataBear',
+  },
   // TODO: set siteUrl (the canonical URL, for link previews) once the portal has a domain.
   scope: {
     // Silang's DPWH office, Cavite 3rd DEO, also serves Bacoor and Dasmariñas,
     // so it is not listed here; its figures appear whole on the district card.
     offices: [],
+    // Labels are short and comma-free because the pages join them into one
+    // sentence ("programs that name Silang, Silang Cavite, …"); the About page
+    // prints each query's exact search term beside its label.
     places: [
-      { label: 'Silang, Cavite', q: 'Silang, Cavite', region: 'IV-A' },
+      { label: 'Silang', q: 'Silang, Cavite', region: 'IV-A' },
       { label: 'Silang Cavite', q: 'Silang Cavite', region: 'IV-A' },
       { label: 'Silang By-Pass Road', q: 'Silang By', region: 'IV-A' },
-      { label: 'East-West Road, Silang section', q: 'Silang Section, Cavite', region: 'IV-A' },
+      { label: 'East-West Road Silang section', q: 'Silang Section, Cavite', region: 'IV-A' },
     ],
     districts: ['leg:cavite:5th'],
     exclude: [
