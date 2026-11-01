@@ -8,6 +8,14 @@ and the page of the source document each figure is on. Beside it, the **enacted 
 2020 to 2026**: every program or project in any department whose name names Silang, and
 the Cavite 3rd District Engineering Office's budget year by year.
 
+**Independent and unofficial.** This portal is run by a private citizen
+([0xDataBear](https://github.com/0xDataBear)). It is not affiliated with, endorsed by or
+speaking for the Municipal Government of Silang, the Province of Cavite, the DPWH, the
+House of Representatives or any official. It republishes figures from public budget
+documents, through the BetterGov.ph Budget API, with the API's notices on every page: a
+project listed in one version of the budget and not the other is a candidate to check,
+never a finding of wrongdoing. Corrections are welcome as GitHub issues on this repository.
+
 **This portal:** not deployed yet; `siteUrl` in `portal.config.ts` is a TODO. Run it
 locally with the steps below. The template's own sample, the Province of Bohol, is at
 [transparency-portal.bettergov.workers.dev](https://transparency-portal.bettergov.workers.dev).
@@ -56,7 +64,7 @@ scope: {
   // substring match, so "Silang" alone would also catch "Silangan", "Bagong Silang" and
   // the Silang heroes; the spellings the documents actually use are searched instead.
   places: [
-    { label: 'Silang, Cavite', q: 'Silang, Cavite', region: 'IV-A' },
+    { label: 'Silang', q: 'Silang, Cavite', region: 'IV-A' },
     { label: 'Silang Cavite', q: 'Silang Cavite', region: 'IV-A' },
   ],
   // District cards to show (representative, offices, tiers).
