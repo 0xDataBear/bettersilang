@@ -17,6 +17,15 @@ documents, through the BetterGov.ph Budget API, with the API's notices on every 
 project listed in one version of the budget and not the other is a candidate to check,
 never a finding of wrongdoing. Corrections are welcome as GitHub issues on this repository.
 
+**What it covers.** The portal finds budget lines whose titles spell out Silang, in both
+spellings the documents use, plus two named roads. A Silang project whose title names only a
+barangay is invisible to it, because Silang shares its DPWH office with Bacoor and Dasmariñas
+and listing the office would bring their projects in. Read the counts as what the documents
+name, not a census. The About page lists every question asked and every line removed by hand.
+
+**Privacy.** No cookies, no analytics, no forms. Your browser fetches the figures from
+budget.bettergov.ph and the typefaces from Google Fonts; the host keeps standard server logs.
+
 **This portal:** not deployed yet; `siteUrl` in `portal.config.ts` is a TODO. Run it
 locally with the steps below. The template's own sample, the Province of Bohol, is at
 [transparency-portal.bettergov.workers.dev](https://transparency-portal.bettergov.workers.dev).
