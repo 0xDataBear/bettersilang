@@ -1,18 +1,34 @@
-# Transparency Portal
+# BetterSilang · Budget Transparency Portal for Silang, Cavite
 
-A small, forkable website that shows citizens **every FY 2027 budget project** for one
-LGU (province, city or municipality) or one DPWH district engineering office: what the
-NEP gave it, what the House bill (House Bill 10858) gives it, what was added or dropped,
-and the page of the source document each figure is on. Beside it, the **enacted budgets
-of 2020 to 2026** for the same area: each DPWH office's budget year by year, and every
-program or project in any department whose name names the place.
+A budget transparency portal for the **Municipality of Silang, Cavite (Region IV-A)**, built
+from BetterGov.ph's forkable [transparency-portal](https://github.com/bettergovph/transparency-portal)
+template and named after the [BetterLGU Directory](https://lgu.bettergov.ph) convention
+(`better[lguname]`). It shows citizens **every FY 2027 budget project** whose title names Silang: what
+the NEP gave it, what the House bill (House Bill 10858) gives it, what was added or dropped,
+and the page of the source document each figure is on. Beside it, the **enacted budgets of
+2020 to 2026**: every program or project in any department whose name names Silang, and
+the Cavite 3rd District Engineering Office's budget year by year.
 
-<p align="center">
-  <img src="docs/poster/create-your-own-transparency-portal-1080x1080.png" alt="Create your own transparency portal: for your LGU or DPWH district office. A sample portal for the Province of Bohol, and three steps: fork, run npm run setup, deploy." width="540">
-</p>
+**Independent and unofficial.** This portal is run by a private citizen
+([0xDataBear](https://github.com/0xDataBear)). It is not affiliated with, endorsed by or
+speaking for the Municipal Government of Silang, the Province of Cavite, the DPWH, the
+House of Representatives or any official. It republishes figures from public budget
+documents, through the BetterGov.ph Budget API, with the API's notices on every page: a
+project listed in one version of the budget and not the other is a candidate to check,
+never a finding of wrongdoing. Corrections are welcome as GitHub issues on this repository.
 
-**See a sample:** [transparency-portal.bettergov.workers.dev](https://transparency-portal.bettergov.workers.dev),
-the Province of Bohol, built from this repository as it is.
+**What it covers.** The portal finds budget lines whose titles spell out Silang, in both
+spellings the documents use, plus two named roads. A Silang project whose title names only a
+barangay is invisible to it, because Silang shares its DPWH office with Bacoor and Dasmariñas
+and listing the office would bring their projects in. Read the counts as what the documents
+name, not a census. The About page lists every question asked and every line removed by hand.
+
+**Privacy.** No cookies, no analytics, no forms. Your browser fetches the figures from
+budget.bettergov.ph and the typefaces from Google Fonts; the host keeps standard server logs.
+
+**This portal:** not deployed yet; `siteUrl` in `portal.config.ts` is a TODO. Run it
+locally with the steps below. The template's own sample, the Province of Bohol, is at
+[transparency-portal.bettergov.workers.dev](https://transparency-portal.bettergov.workers.dev).
 
 It has no backend and no database. Everything comes from the public
 [BetterGov.ph Budget API](https://budget.bettergov.ph/docs), the same data behind
@@ -50,14 +66,21 @@ more stated reasons, and every row shows them.
 
 ```ts
 scope: {
-  // Every DPWH line the documents list under these offices.
-  offices: ['Bohol 1st District Engineering Office'],
-  // Every line in the four programs whose title names the place.
-  places: [{ label: 'Bohol', region: 'VII' }],
+  // Every DPWH line the documents list under these offices. Silang's office, Cavite 3rd
+  // DEO, also serves Bacoor and Dasmariñas, so it is not listed; the district card
+  // shows its figures whole.
+  offices: [],
+  // Every line in the four programs whose title names the place. The search is a
+  // substring match, so "Silang" alone would also catch "Silangan", "Bagong Silang" and
+  // the Silang heroes; the spellings the documents actually use are searched instead.
+  places: [
+    { label: 'Silang', q: 'Silang, Cavite', region: 'IV-A' },
+    { label: 'Silang Cavite', q: 'Silang Cavite', region: 'IV-A' },
+  ],
   // District cards to show (representative, offices, tiers).
-  districts: ['leg:bohol:1st'],
+  districts: ['leg:cavite:5th'],
   // Lines removed by hand. Each needs a reason; the About page publishes them.
-  exclude: [],
+  exclude: [{ key: 'dpwh:house-reading:13074', reason: 'Barangay Bagong Silang is in Imus City…' }],
 }
 ```
 

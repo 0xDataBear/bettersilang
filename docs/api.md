@@ -26,7 +26,7 @@ Every response carries `meta` (with `notice`, the source commit and build date) 
 ## Details worth knowing
 
 - The `office` filter matches the office **as the documents publish it**
-  ("Bohol 1st District Engineering Office"), not the short card name ("Bohol 1st DEO").
+  ("Cavite 3rd District Engineering Office"), not the short card name ("Cavite 3rd DEO").
   `npm run setup -- --list-offices` prints the published names; they come from each
   office's FY 2027 `matched_label` on its district page.
 - The irrigation list gives no region, so the API's `region` filter would drop every

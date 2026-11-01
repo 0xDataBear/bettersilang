@@ -9,8 +9,19 @@ const escape = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').r
 function portalHtml(api: string): Plugin {
   const title = `${portal.name} · FY 2027 budget projects`;
   const description = `Every FY 2027 project for ${shortNameOf(portal)} in the NEP and the House bill (House Bill 10858), with the source page for each, and the enacted budgets 2020–2026. Data from the BetterGov.ph Budget API.`;
-  const url = portal.siteUrl
-    ? `<link rel="canonical" href="${escape(portal.siteUrl)}" />\n    <meta property="og:url" content="${escape(portal.siteUrl)}" />`
+  // With a siteUrl, the page also gets its Open Graph image (public/og.png,
+  // 1200×630); the tag needs an absolute URL, so without a siteUrl it is left out.
+  const site = portal.siteUrl?.replace(/\/+$/, '');
+  const url = site
+    ? [
+        `<link rel="canonical" href="${escape(site)}" />`,
+        `<meta property="og:url" content="${escape(site)}" />`,
+        `<meta property="og:image" content="${escape(site)}/og.png" />`,
+        `<meta property="og:image:width" content="1200" />`,
+        `<meta property="og:image:height" content="630" />`,
+        `<meta property="og:image:alt" content="${escape(`${portal.name}: budget transparency portal for ${shortNameOf(portal)}. Independent and unofficial.`)}" />`,
+        `<meta name="twitter:image" content="${escape(site)}/og.png" />`,
+      ].join('\n    ')
     : '';
   return {
     name: 'portal-html',
