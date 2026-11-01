@@ -167,6 +167,7 @@ function Projects({ scope, datasets }: { scope: ScopeResult; datasets: DatasetIn
             );
           })}
         </div>
+        <GroupHelp groups={groups} summary={summary} active={status} />
       </section>
 
       <section className="section" id="projects" aria-labelledby="list-h">
@@ -277,6 +278,27 @@ function groupAmount(g: BridgeGroup, c: { nep_php: number; house_php: number; ro
   }
 }
 
+/**
+ * What a status means, in the API's own words, under the tiles: tooltips do not
+ * exist on a phone and are unreliable for screen readers. With no tile picked it
+ * explains the candidate groups, the ones most easily misread.
+ */
+function GroupHelp({ groups, summary, active }: { groups: Record<BridgeGroup, GroupWords>; summary: Summary; active: BridgeGroup | '' }) {
+  const candidates = (['house_only', 'nep_only'] as const).filter((g) => summary.groups[g].rows > 0 && groups[g].help);
+  return (
+    <div className="group-help" aria-live="polite">
+      {active ? (
+        <p><strong>{groups[active].label}:</strong> {groups[active].help} The list below shows only these. Pick the tile again to show every project.</p>
+      ) : (
+        <>
+          {candidates.map((g) => <p key={g}><strong>{groups[g].label}:</strong> {groups[g].help}</p>)}
+          <p className="muted">Pick a status to filter the list and read what it means.</p>
+        </>
+      )}
+    </div>
+  );
+}
+
 function Lede({ summary }: { summary: Summary }) {
   const added = summary.groups.house_only.rows;
   const dropped = summary.groups.nep_only.rows;
@@ -321,7 +343,7 @@ function Stats({ summary, programName }: { summary: Summary; programName: (k: Da
       <div>
         <dt className="label">In the House bill only</dt>
         <dd className="stat num">{count(summary.groups.house_only.rows)}</dd>
-        <dd className="stat-sub">{php(summary.groups.house_only.house_php)} · insertion candidates</dd>
+        <dd className="stat-sub">{php(summary.groups.house_only.house_php)} · to check: may be new or renamed</dd>
       </div>
     </dl>
   );

@@ -3,6 +3,7 @@ import type { BridgeGroup, Disclaimer } from '../api/types';
 import type { Async } from '../lib/portal-context';
 import { usePortal } from '../lib/portal-context';
 import type { Reason } from '../lib/scope';
+import { NATIONAL_URL } from '../lib/links';
 
 /** The plain status, as the API words it, with the group's colour. */
 export function StatusChip({ group, label, held }: { group: BridgeGroup; label: string; held?: boolean }) {
@@ -53,7 +54,7 @@ export function Disclaimers({ items, compact }: { items: Disclaimer[]; compact?:
 }
 
 /** Render `ready`, or a loading line, or the error with a retry. */
-export function Await<T>({ state, children, what }: { state: Async<T>; children: (value: T) => ReactNode; what: string }) {
+export function Await<T>({ state, children, what, hideError }: { state: Async<T>; children: (value: T) => ReactNode; what: string; hideError?: boolean }) {
   const { retry } = usePortal();
   if (state.status === 'ready') return <>{children(state.value)}</>;
   if (state.status === 'loading') {
@@ -63,14 +64,30 @@ export function Await<T>({ state, children, what }: { state: Async<T>; children:
       </div>
     );
   }
+  if (hideError) return null;
+  return <ErrorState what={what} error={state.error} onRetry={retry} />;
+}
+
+/**
+ * A failed load, in plain words: what failed, the likely cause, and two ways
+ * forward (try again, or read the same figures on budget.bettergov.ph).
+ * The browser's own message stays available as a detail, not as the headline.
+ */
+export function ErrorState({ what, error, onRetry }: { what: string; error: Error; onRetry: () => void }) {
+  const network = /failed to fetch|networkerror|load failed|network request failed/i.test(error.message);
   return (
     <div className="state state-error" role="alert">
       <p>
-        <strong>Could not load {what}.</strong> {state.error.message}
+        <strong>Could not load {what}.</strong>{' '}
+        {network
+          ? 'The connection to the BetterGov.ph Budget API failed. Check your connection and try again.'
+          : 'The BetterGov.ph Budget API did not answer as expected. Try again in a moment.'}
       </p>
-      <button type="button" className="button" onClick={retry}>
-        Try again
-      </button>
+      <p className="state-actions">
+        <button type="button" className="button" onClick={onRetry}>Try again</button>
+        <External href={NATIONAL_URL}>See every project on budget.bettergov.ph</External>
+      </p>
+      <p className="state-detail">Details: {error.message}</p>
     </div>
   );
 }

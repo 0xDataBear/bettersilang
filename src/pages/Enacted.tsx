@@ -10,7 +10,7 @@ import { useLocation, useSearchParams } from 'react-router-dom';
 import type { DistrictCard, DistrictOffice, Envelope } from '../api/types';
 import { GAA_YEARS } from '../api/types';
 import { shortNameOf } from '../config';
-import { Await, Disclaimers, External } from '../components/Bits';
+import { Await, Disclaimers, ErrorState, External } from '../components/Bits';
 import { PageHead } from '../components/Chrome';
 import { downloadText } from '../lib/csv';
 import { count, php, phpFull, plural } from '../lib/format';
@@ -23,7 +23,7 @@ const FIRST = GAA_YEARS[0];
 const LAST = GAA_YEARS[GAA_YEARS.length - 1];
 
 export default function Enacted() {
-  const { config, client, districts } = usePortal();
+  const { config, client, districts, retry } = usePortal();
   const name = shortNameOf(config);
   useTitle(`Enacted budgets ${FIRST}–${LAST} · ${name}`);
   const places = config.scope.places ?? [];
@@ -69,7 +69,8 @@ export default function Enacted() {
         </p>
       </PageHead>
 
-      <OfficeHistories />
+      {/* When the program search failed too, one error below covers both. */}
+      <OfficeHistories hideError={state.status === 'error'} />
 
       {places.length === 0 ? (
         <p className="fine section-gap">
@@ -82,10 +83,15 @@ export default function Enacted() {
           {progress && progress.total > 0 && <> · {count(progress.done)} of {count(progress.total)}</>}…
         </div>
       ) : state.status === 'error' ? (
-        <div className="state state-error" role="alert">
-          <p><strong>Could not load the enacted budgets.</strong> {state.error.message}</p>
-          <button type="button" className="button" onClick={() => { setState({ status: 'loading' }); setAttempt((n) => n + 1); }}>Try again</button>
-        </div>
+        <ErrorState
+          what="the enacted budgets"
+          error={state.error}
+          onRetry={() => {
+            setState({ status: 'loading' });
+            setAttempt((n) => n + 1);
+            if (districts.status === 'error') retry();
+          }}
+        />
       ) : (
         <Programs result={state.value} placeList={placeList} />
       )}
@@ -112,11 +118,11 @@ export default function Enacted() {
 // DPWH offices, year by year
 // ---------------------------------------------------------------------------
 
-function OfficeHistories() {
+function OfficeHistories({ hideError }: { hideError?: boolean }) {
   const { districts, config } = usePortal();
   if (!config.scope.offices?.length && !config.scope.districts?.length) return null;
   return (
-    <Await state={districts} what="DPWH office budgets">
+    <Await state={districts} what="DPWH office budgets" hideError={hideError}>
       {(list) => <OfficeHistoryList list={list} />}
     </Await>
   );
