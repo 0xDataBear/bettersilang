@@ -19,7 +19,8 @@ export default defineConfig({
   kind: 'municipality',
   name: 'Municipality of Silang, Cavite',
   shortName: 'Silang',
-  operator: { name: '0xDataBear' },
+  operator: { name: '0xDataBear', url: 'https://github.com/0xDataBear' },
+  // TODO: set siteUrl (the canonical URL, for link previews) once the portal has a domain.
   scope: {
     // Silang's DPWH office, Cavite 3rd DEO, also serves Bacoor and Dasmariñas,
     // so it is not listed here; its figures appear whole on the district card.
