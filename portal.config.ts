@@ -17,7 +17,10 @@ import { defineConfig } from './src/config';
 export default defineConfig({
   id: 'silang-cavite',
   kind: 'municipality',
-  name: 'Municipality of Silang, Cavite',
+  // "BetterSilang" rather than "Municipality of Silang, Cavite": the name is the
+  // tab title, the link-preview site name and the masthead, and must not read as
+  // the municipal government's own site. Prose uses shortName.
+  name: 'BetterSilang',
   shortName: 'Silang',
   // The footer reads "Silang, run by <operator.name>", so the name carries the
   // independence notice onto every page.
