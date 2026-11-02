@@ -30,8 +30,9 @@ export default defineConfig({
     url: 'https://github.com/0xDataBear',
     note: 'a private citizen, not affiliated with the Municipal Government of Silang',
   },
-  // Canonical URL: link previews and the share card. Change it to the .org domain once that exists.
-  siteUrl: 'https://bettersilang.vercel.app',
+  // Canonical URL: link previews and the share card. Vercel serves www as primary;
+  // bettersilang.org and bettersilang.vercel.app redirect or mirror it.
+  siteUrl: 'https://www.bettersilang.org',
   scope: {
     // Silang's DPWH office, Cavite 3rd DEO, also serves Bacoor and Dasmariñas,
     // so it is not listed here; its figures appear whole on the district card.

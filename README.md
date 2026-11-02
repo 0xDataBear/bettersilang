@@ -26,7 +26,7 @@ name, not a census. The About page lists every question asked and every line rem
 **Privacy.** No cookies, no analytics, no forms. Your browser fetches the figures from
 budget.bettergov.ph and the typefaces from Google Fonts; the host keeps standard server logs.
 
-**This portal:** live at [bettersilang.vercel.app](https://bettersilang.vercel.app). Run it
+**This portal:** live at [bettersilang.org](https://www.bettersilang.org) (also at [bettersilang.vercel.app](https://bettersilang.vercel.app)). Run it
 locally with the steps below. The template's own sample, the Province of Bohol, is at
 [transparency-portal.bettergov.workers.dev](https://transparency-portal.bettergov.workers.dev).
 
